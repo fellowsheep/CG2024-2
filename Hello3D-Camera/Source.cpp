@@ -61,6 +61,12 @@ const GLchar* fragmentShaderSource = "#version 430\n"
 
 bool rotateX=false, rotateY=false, rotateZ=false;
 
+//Variáveis globais da câmera
+glm::vec3 cameraPos = glm::vec3(0.0f,0.0f,3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f,0.0,-1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f,1.0f,0.0f);
+
+
 // Função MAIN
 int main()
 {
@@ -123,7 +129,7 @@ int main()
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 	//Matriz de view
-	glm::mat4 view = glm::lookAt(glm::vec3(0.0f,0.0f,3.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f));
+	glm::mat4 view = glm::lookAt(cameraPos,glm::vec3(0.0f,0.0f,0.0f),cameraUp);
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, "view"), 1, GL_FALSE, glm::value_ptr(view));
 	//Matriz de projeção
 	//glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
@@ -165,9 +171,15 @@ int main()
 		}
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		
+		//Atualizar a matriz de view
+		//Matriz de view
+		glm::mat4 view = glm::lookAt(cameraPos,cameraPos + cameraFront,cameraUp);
+		glUniformMatrix4fv(glGetUniformLocation(shaderID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		
+		
 		// Chamada de desenho - drawcall
 		// Poligono Preenchido - GL_TRIANGLES
-		
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 18);
 
@@ -215,6 +227,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		rotateY = false;
 		rotateZ = true;
 	}
+
+	//Verifica a movimentação da câmera
+	float cameraSpeed = 0.05f;
+
+	if ((key == GLFW_KEY_W || key == GLFW_KEY_UP) && action == GLFW_PRESS)
+	{
+		cameraPos += cameraSpeed * cameraFront;
+	}
+	if ((key == GLFW_KEY_S || key == GLFW_KEY_DOWN) && action == GLFW_PRESS)
+	{
+		cameraPos -= cameraSpeed * cameraFront;
+	}
+	if ((key == GLFW_KEY_A || key == GLFW_KEY_LEFT) && action == GLFW_PRESS)
+	{
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
+	if ((key == GLFW_KEY_D || key == GLFW_KEY_RIGHT) && action == GLFW_PRESS)
+	{
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
+
 
 
 
