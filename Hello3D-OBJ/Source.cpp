@@ -127,7 +127,7 @@ int main()
 	GLuint shaderID = setupShader();
 
 	Object obj;
-	obj.VAO = loadSimpleOBJ("C:\\Users\\rossanaqueiroz\\Documents\\Github\\CG2024-2\\Hello3D-OBJ\\Suzanne.obj",obj.nVertices);
+	obj.VAO = loadSimpleOBJ("./Suzanne.obj",obj.nVertices);
 
 
 	glUseProgram(shaderID);
@@ -443,44 +443,39 @@ int loadSimpleOBJ(string filePath, int &nVertices)
 			}
 			else if (word == "f")
 			{
-				string tokens[3];
-				
-				ssline >> tokens[0] >> tokens[1] >> tokens[2];
-				//cout << tokens[0] << " " << tokens[1] << " " << tokens[2] << endl;
-				for (int i = 0; i < 3; i++)
+				while (ssline >> word) 
 				{
-					//Recuperando os indices de v
-					int pos = tokens[i].find("/");
-					string token = tokens[i].substr(0, pos);
-					int index = atoi(token.c_str()) - 1;
-					
+					int vi, ti, ni;
+					istringstream ss(word);
+    				std::string index;
+
+    				// Pega o índice do vértice
+    				std::getline(ss, index, '/');
+    				vi = std::stoi(index) - 1;  // Ajusta para índice 0
+
+    				// Pega o índice da coordenada de textura
+    				std::getline(ss, index, '/');
+    				ti = std::stoi(index) - 1;
+
+    				// Pega o índice da normal
+    				std::getline(ss, index);
+    				ni = std::stoi(index) - 1;
+
 					//Recuperando os vértices do indice lido
-					vBuffer.push_back(vertices[index].x);
-					vBuffer.push_back(vertices[index].y);
-					vBuffer.push_back(vertices[index].z);
-					cout << index << " ";
+					vBuffer.push_back(vertices[vi].x);
+					vBuffer.push_back(vertices[vi].y);
+					vBuffer.push_back(vertices[vi].z);
+					
+					//Atributo cor
 					vBuffer.push_back(color.r);
 					vBuffer.push_back(color.g);
 					vBuffer.push_back(color.b);
+					
+        			
+        			// Exibindo os índices para verificação
+       				// std::cout << "v: " << vi << ", vt: " << ti << ", vn: " << ni << std::endl;
+    			}
 				
-					//Recuperando os indices de vts
-					tokens[i] = tokens[i].substr(pos + 1);
-					pos = tokens[i].find("/");
-					token = tokens[i].substr(0, pos);
-					index = atoi(token.c_str()) - 1;
-
-					//vBuffer.push_back(texCoords[index].s);
-					//vBuffer.push_back(texCoords[index].t);
-					cout << index << " ";
-					//Recuperando os indices de vns
-					tokens[i] = tokens[i].substr(pos + 1);
-					index = atoi(tokens[i].c_str()) - 1;
-
-					//vBuffer.push_back(normals[index].x);
-					//vBuffer.push_back(normals[index].y);
-					//vBuffer.push_back(normals[index].z);
-					cout << index << endl;
-				}
 			}
 		}
 
