@@ -127,7 +127,7 @@ int main()
 	GLuint shaderID = setupShader();
 
 	Object obj;
-	obj.VAO = loadSimpleOBJ("C:\\Users\\rossanaqueiroz\\Documents\\Github\\CG2024-2_\\Hello3D-OBJ\\Suzanne.obj",obj.nVertices);
+	obj.VAO = loadSimpleOBJ("C:\\Users\\rossanaqueiroz\\Documents\\Github\\CG2024-2\\Hello3D-OBJ\\Suzanne.obj",obj.nVertices);
 
 
 	glUseProgram(shaderID);
