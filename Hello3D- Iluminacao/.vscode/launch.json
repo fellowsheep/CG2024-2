@@ -26,8 +26,8 @@
           "engineLogging": true,        // Para diagnosticar problemas
           "trace": true
         },
-        "visualizerFile": "${workspaceFolder}/.vscode/gdb.visualizers",
-        "console": "integratedTerminal"
+        "visualizerFile": "${workspaceFolder}/.vscode/gdb.visualizers"
+        
       }
     ]
   }
