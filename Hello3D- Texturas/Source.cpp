@@ -110,11 +110,12 @@ int main()
 	Shader shader("phong.vs","phong.fs");
 
 	Object obj;
-	obj.VAO = loadSimpleOBJ("../Modelos3D/Suzannes/SuzanneHigh.obj",obj.nVertices);
+	//obj.VAO = loadSimpleOBJ("../Modelos3D/Suzannes/SuzanneHigh.obj",obj.nVertices);
+	obj.VAO = loadSimpleOBJ("../Modelos3D/aratwearingabackpack/obj/model.obj",obj.nVertices);
 	//obj.VAO = loadSimpleOBJ("./Nave.obj",obj.nVertices);
 	//obj.VAO = loadSimpleOBJ("C:\\Users\\rossanaqueiroz\\Documents\\Github\\CG2024-2\\Hello3D-OBJ\\Suzanne.obj",obj.nVertices);
 	int texWidth,texHeight;
-	obj.texID = loadTexture("../Modelos3D/Suzannes/Suzanne.png",texWidth,texHeight);
+	obj.texID = loadTexture("../Modelos3D/aratwearingabackpack/textures/texture_1.jpeg",texWidth,texHeight);
 
 	glUseProgram(shader.ID);
 
