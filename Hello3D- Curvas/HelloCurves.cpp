@@ -75,6 +75,8 @@ GeometryAxes createAxesVAO();
 void drawAxesVAO(const GeometryAxes& axes, GLuint shaderID);
 std::vector<glm::vec3> generateHeartControlPoints(int numPoints = 20);
 
+void generateGlobalBezierCurvePoints(Curve &curve, int numPoints);
+
 // Dimensões da janela (pode ser alterado em tempo de execução)
 const GLuint WIDTH = 600, HEIGHT = 600;
 
@@ -130,7 +132,8 @@ int main()
 
     // Gerar pontos da curva de Bézier
     int numCurvePoints = 100; // Quantidade de pontos por segmento na curva
-    generateBezierCurvePoints(curvaBezier, numCurvePoints);
+    generateGlobalBezierCurvePoints(curvaBezier,numCurvePoints);
+    //generateBezierCurvePoints(curvaBezier, numCurvePoints);
     generateCatmullRomCurvePoints(curvaCatmullRom, numCurvePoints);
 
     //Cria a grid de debug
@@ -475,3 +478,29 @@ std::vector<glm::vec3> generateHeartControlPoints(int numPoints) {
 
     return controlPoints;
 }
+
+void generateGlobalBezierCurvePoints(Curve &curve, int numPoints) {
+    curve.curvePoints.clear(); // Limpa quaisquer pontos antigos da curva
+
+    int n = curve.controlPoints.size() - 1; // Grau da curva
+    float t;
+    float piece = 1.0f / (float)numPoints;
+
+    for (int j = 0; j <= numPoints; ++j) {
+        t = j * piece;
+        glm::vec3 point(0.0f); // Ponto na curva
+
+        // Calcula o ponto da curva usando a fórmula de Bernstein
+        for (int i = 0; i <= n; ++i) {
+            // Coeficiente binomial
+            float binomialCoeff = (float) (tgamma(n + 1) / (tgamma(i + 1) * tgamma(n - i + 1)));
+            // Polinômio de Bernstein
+            float bernsteinPoly = binomialCoeff * pow(1 - t, n - i) * pow(t, i);
+            // Soma ponderada dos pontos de controle
+            point += bernsteinPoly * curve.controlPoints[i];
+        }
+
+        curve.curvePoints.push_back(point);
+    }
+}
+
