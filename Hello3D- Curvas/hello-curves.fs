@@ -1,4 +1,4 @@
-#version 450 core
+#version 400
 
 uniform vec4 finalColor;
 
